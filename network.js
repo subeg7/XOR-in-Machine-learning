@@ -20,13 +20,20 @@ class NeuralNetwork{
     this.bias_output.randomize();
 
     //set learning_rate;
-    this.learning_rate;
+    this.learning_rate=0.1;
 
 
     this.bias =1 ;
   }
 
+  let sigmoid = new ActivationFunction(
+    x => 1 / (1 + Math.exp(-x)),
+    y => y * (1 - y)
+  );
 
+  setActivationFunction(func = sigmoid){
+    this.activation_function = func;
+  }
 
    feedforward(input_values){
 
