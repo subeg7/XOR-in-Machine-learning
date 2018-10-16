@@ -56,7 +56,6 @@ class NeuralNetwork{
       console.log("hidden part");
      let hidden = Matrix.multiply(this.hi_weights, input_mat);
      hidden.add(this.bias_hidden);
-     // hidden.display();
 
      //activation function
      hidden.map(this.activation_function.func)
@@ -71,12 +70,25 @@ class NeuralNetwork{
 
      output.map(this.activation_function.func);
 
+     return output;
 
-     //return final output
   }
 
-  backpropagate(input_values,true_values){
-    //train the weights
+  backpropagate(true_values,output){
+
+    //transform array into matrix
+    let targets = Matrix.fromArray(true_values);
+    //calucalte error
+    let error = Matrix.subtract(targets, output);
+    //find garadients
+    let gradients = Matrix.map(outputs, this.activation_function.dfunc);
+    gradients.multiply(this.learning_rate);
+
+
+
+    // let inputs = Matrix.fromArray(input_array);
+    // let hidden = Matrix.multiply(this.hi_weights, inputs);
+
   }
 
 
