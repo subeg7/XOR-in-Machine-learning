@@ -45,30 +45,32 @@ class NeuralNetwork{
   }
 
    feedforward(input_values){
+     //array into single column matrix
      console.log("input="+input_values);
-
      let input_mat = Matrix.fromArray(input_values);
-
      console.log("mat.data="+input_mat.data);
-
       input_mat.display();
-     
-     let hidden = Matrix.multiply(this.hi_weights, input_mat);
-     console.log(hidden);
 
-     // let hidden= this.hi_weights.multiply(input_set);
+
+      //hidden layer inputs
+      console.log("hidden part");
+     let hidden = Matrix.multiply(this.hi_weights, input_mat);
      hidden.add(this.bias_hidden);
+     // hidden.display();
+
      //activation function
      hidden.map(this.activation_function.func)
+     hidden.display();
 
-     //for output layer
+
+     // output layer inputs(output of hidden)
+     console.log("output layer");
      let output = Matrix.multiply(this.ho_weights, hidden);
-     output.add(this.bias_o);
+     output.add(this.bias_output);
+     output.display();
+
      output.map(this.activation_function.func);
 
-
-     console.log("output=");
-     console.log(output.data[0]);
 
      //return final output
   }
