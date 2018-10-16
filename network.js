@@ -70,24 +70,53 @@ class NeuralNetwork{
 
      output.map(this.activation_function.func);
 
-     return output;
+     return [input_mat,hidden,output];
 
   }
 
-  backpropagate(true_values,output){
-
+  backpropagate(true_values,input,hidden,output){
+    console.log("hidden:");
+    hidden.display();
+    console.log("output:");
+    output.display();
     //transform array into matrix
     let targets = Matrix.fromArray(true_values);
     //calucalte error
     let error = Matrix.subtract(targets, output);
     //find garadients
-    let gradients = Matrix.map(outputs, this.activation_function.dfunc);
+    console.log("this.activation_function.dfunc"+this.activation_function.derivative);
+    let gradients = Matrix.map(output, this.activation_function.derivative);
     gradients.multiply(this.learning_rate);
+    console.log("gradients");
+    gradients.display();
+    // Calculate deltas
+    let hidden_T = Matrix.transpose(hidden);
+    let weight_ho_deltas = Matrix.multiply(gradients, hidden_T);
+
+    // Adjust the weights by deltas
+    this.ho_weights.add(weight_ho_deltas);
+    // Adjust the bias by its deltas (which is just the gradients)
+    this.bias_output.add(gradients);
 
 
+    // Calculate the hidden layer errors
+    let who_t = Matrix.transpose(this.ho_weights);
+    let hidden_errors = Matrix.multiply(who_t, error);
 
-    // let inputs = Matrix.fromArray(input_array);
-    // let hidden = Matrix.multiply(this.hi_weights, inputs);
+    // Calculate hidden gradient
+    let hidden_gradient = Matrix.map(hidden_errors, this.activation_function.derivative);
+    hidden_gradient.multiply(hidden_errors);
+    hidden_gradient.multiply(this.learning_rate);
+
+    // Calcuate input->hidden deltas
+    let inputs_T = Matrix.transpose(input);
+    console.log("inputs.display");
+    input.display();
+    let weight_ih_deltas = Matrix.multiply(hidden_gradient, inputs_T);
+
+    this.hi_weights.add(weight_ih_deltas);
+    // Adjust the bias by its deltas (which is just the gradients)
+    this.bias_hidden.add(hidden_gradient);
 
   }
 
