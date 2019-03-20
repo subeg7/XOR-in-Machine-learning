@@ -22,6 +22,8 @@ class Matrix {
       .map((_, i, j) => a.data[i][j] - b.data[i][j]);
   }
 
+  
+  
   toArray() {
     let arr = [];
     for (let i = 0; i < this.rows; i++) {
